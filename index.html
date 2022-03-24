@@ -1,0 +1,189 @@
+<!-- 563492ad6f91700001000001e6eaf5d6b86540c89a27d0db225dadc9 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pexel API</title>
+    <style>
+        * {
+            margin: 5px 0;
+        }
+
+        body {
+            text-align: center;
+        }
+
+        #search-bar {
+            width: 40%;
+            height: 30px;
+            margin: 30px 0;
+        }
+
+
+
+        #image-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1500px;
+            min-width: 600px;
+            margin: auto;
+
+
+        }
+
+        .image-column {
+            width: 22%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: flex-start;
+
+        }
+
+
+        .photoDiv {
+            width: 100%;
+            margin-bottom: 3%;
+            position: relative;
+
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .photographer {
+            position: absolute;
+            bottom: 4px;
+            height: 20px;
+            color: white;
+            padding-top: 20px;
+            text-align: left;
+            text-indent: 10px;
+            padding-bottom: 20px;
+            width: 100%;
+            margin-bottom: 0px;
+            background: linear-gradient(0deg, rgba(43, 42, 42, 0.795), rgba(48, 47, 47, 0.034));
+
+            display: block;
+            display: none;
+
+        }
+
+        .photoDiv:hover>.photographer {
+            cursor: pointer;
+            display: block;
+            transition-delay: 0s;
+
+
+        }
+    </style>
+</head>
+
+<body>
+    <form id="search-form">
+        <input id="search-bar" type="text" placeholder="search">
+    </form>
+    <div id="image-section">
+        <div class="image-column active-column" id="image-column1"></div>
+        <div class="image-column" id="image-column2"></div>
+        <div class="image-column" id="image-column3"></div>
+        <script>
+            var searchForm = document.querySelector('#search-form')
+            searchForm.addEventListener('submit', e => {
+                e.preventDefault();
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        var res = JSON.parse(xhttp.responseText);
+                        var photosData = res.photos;
+                        var imageSection = document.getElementById("image-section");
+                        var imageColumn = document.querySelectorAll(".image-column");
+                        var imageColumn1 = document.getElementById("image-column1");
+                        var imageColumn2 = document.getElementById("image-column2");
+                        var imageColumn3 = document.getElementById("image-column3");
+
+                        imageColumn1.innerHTML = ` `;
+                        imageColumn2.innerHTML = ` `;
+                        imageColumn3.innerHTML = ` `;
+
+                        var i = 0;
+
+                        photosData.forEach(photo => {
+                            console.log(photo);
+                            var photoDiv = document.createElement('div');
+                            photoDiv.classList.add('photo-div');
+                            photoDiv.innerHTML = `
+                    <img src=${photo.src.large}/>
+                    <p class="photographer">${photo.photographer}</p>
+                    `;
+                            imageColumn[i].appendChild(photoDiv);
+                            if (i < imageSection.childElementCount - 1) {
+                                i++;
+                            } else {
+                                i = 1;
+                            };
+                        });
+
+                    }
+                };
+
+                var textValue = document.querySelector('#search-bar').value;
+                xhttp.open("GET", `https://api.pexels.com/v1/search?query=${textValue}`, true);
+                xhttp.setRequestHeader('authorization',
+                    '563492ad6f91700001000001e6eaf5d6b86540c89a27d0db225dadc9')
+                xhttp.send();
+            });
+        </script>
+</body>
+
+</html>
+
+<!-- 
+var searchForm = document.querySelector("#search-form");
+searchForm.addEventListener("submit", function(e){
+e.preventDefault()
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+if (this.readyState == 4 && this.status == 200) {
+// Typical action to be performed when the document is ready: <p>${image.photographer}</p>
+var contentsDatabase = JSON.parse(xhttp.responseText);
+
+var imageDatabase = contentsDatabase.photos;
+console.log(imageDatabase)
+var imageSection = document.getElementById("image-section");
+var imageColumn = document.querySelectorAll(".image-column");
+var imageColumn1 = document.getElementById("image-column1");
+var imageColumn2 = document.getElementById("image-column2");
+var imageColumn3 = document.getElementById("image-column3");
+
+
+
+imageColumn1.innerHTML="";
+imageColumn2.innerHTML="";
+imageColumn3.innerHTML="";
+var i = 0;
+imageDatabase.forEach(function(image){
+
+var imageContainer = document.createElement("div");
+imageContainer.classList.add("image-container");
+imageContainer.innerHTML=`
+<img class="images" src=${image.src.original}>
+<p class="photographer">${image.photographer}</p>
+`
+
+imageColumn[i].appendChild(imageContainer);
+if (i<imageSection.childElementCount-1){i++;} else { i=0}; }) } };
+ var textValue=document.querySelector(".search-bar").value; xhttp.open("GET",
+    `https://api.pexels.com/v1/search?query=${textValue}`, true);
+    xhttp.setRequestHeader("Authorization", "563492ad6f91700001000001729fe1bd16a543f7908e7411efc5a6ae" ) xhttp.send();
+    }) /* var searchForm=document.querySelector("#search-form"); searchForm.addEventListener("submit", function(e){
+    e.preventDefault() var textValue=document.querySelector("#search-bar").value; */
+ -->
